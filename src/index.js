@@ -1,11 +1,27 @@
-const { getUserLog } = require("./gitUtils");
+const fs = require("fs");
+const { getTeamReport } = require("./gitReport");
 
-const path = "/Users/jakobjonasson/Code/git-team-queries/.git";
+console.log("---------------------------");
+console.log("Reading settings from users.txt and repos.txt");
+var users = fs
+  .readFileSync("users.txt", "utf8")
+  .toString()
+  .split("\n");
+var repos = fs
+  .readFileSync("repos.txt", "utf8")
+  .toString()
+  .split("\n");
 
-getUserLog({
-  path,
-  author: "jakobjo",
-  since: "2019-06-17"
-}).then(result => {
-  console.log(result);
+console.log("---------------------------");
+console.log("Target users", users);
+console.log("Target repositories", repos);
+
+console.log("---------------------------");
+console.log("Generating report");
+
+const since = "2019-06-17";
+getTeamReport(users, repos, since).then(report => {
+  console.log("---------------------------");
+  console.log("Report");
+  console.log(report);
 });
