@@ -28,6 +28,7 @@ function parseIssueKey(message) {
   if (matches === null || matches < 1) {
     return null;
   }
+
   return matches[1];
 }
 

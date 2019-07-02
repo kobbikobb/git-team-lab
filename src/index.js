@@ -19,7 +19,9 @@ console.log("Target repositories", repos);
 console.log("---------------------------");
 console.log("Generating report");
 
-const since = "2019-06-17";
+const since =
+  process.argv.slice(2) || new Date().toISOString().substring(0, 10);
+
 getTeamReport(users, repos, since).then(report => {
   console.log("---------------------------");
   console.log("Report");

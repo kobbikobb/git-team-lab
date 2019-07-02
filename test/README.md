@@ -1,16 +1,30 @@
 # Reads statistics from Git for the users on your team
 
-## Setup your connections to your repositories
+## Setup your repositories
 
-TODO: Add
+Create a file in the root of this project called repos.txt.
+Add a line for each target repository.
 
-## Setup your team
+example:
+/Users/jakobjonasson/.tempo/firstproject/.git
+/Users/jakobjonasson/.tempo/secondproject/.git
 
-TODO: Add
+## Setup users on your team
+
+Create a file in the root of this project called users.txt.
+Add a line for each target username.
+
+example:
+john
+mike
 
 ## Get the reports
 
-TODO: Add
+Get a report for today
+node ./src/index.js
+
+Get a report since a day
+node ./src/index.js '2008-01-01'
 
 ## Run tests
 
