@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { getTeamReport } = require("./gitReport");
+const { writeSimpleFormatToConsole } = require("./reportTemplate");
 
 console.log("---------------------------");
 console.log("Reading settings from users.txt and repos.txt");
@@ -25,5 +26,6 @@ const since =
 getTeamReport(users, repos, since).then(report => {
   console.log("---------------------------");
   console.log("Report");
-  console.log(report);
+  console.log("---------------------------");
+  writeSimpleFormatToConsole(report);
 });
