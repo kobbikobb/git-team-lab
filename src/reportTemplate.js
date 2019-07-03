@@ -1,3 +1,5 @@
+const { writeHeader, writeSubHeader, andBreak } = require("./consoleWriter");
+
 function stringColumn(value) {
   return value.padEnd(15);
 }
@@ -15,7 +17,7 @@ function writeSimpleFormatToConsole(report) {
     numberColumn("Commits") +
     numberColumn("Issues");
 
-  console.log("\x1b[35m", header);
+  writeHeader(header);
 
   const userNames = Object.keys(report);
 
@@ -36,8 +38,10 @@ function writeSimpleFormatToConsole(report) {
       numberColumn(numberOfCommits) +
       numberColumn(numberOfIssues);
 
-    console.log("\x1b[32m", line);
+    writeSubHeader(line);
   });
+
+  andBreak();
 }
 
 module.exports = {

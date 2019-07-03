@@ -1,9 +1,10 @@
 const fs = require("fs");
 const { getTeamReport } = require("./gitReport");
 const { writeSimpleFormatToConsole } = require("./reportTemplate");
+const { writeText, writeInfo } = require("./consoleWriter");
 
-console.log("---------------------------");
-console.log("Reading settings from users.txt and repos.txt");
+writeText("Reading settings from users.txt and repos.txt").andBreak();
+
 var users = fs
   .readFileSync("users.txt", "utf8")
   .toString()
@@ -13,19 +14,18 @@ var repos = fs
   .toString()
   .split("\n");
 
-console.log("---------------------------");
-console.log("Target users", users);
-console.log("Target repositories", repos);
-
-console.log("---------------------------");
-console.log("Generating report");
+writeInfo("Target users")
+  .andLines(users)
+  .andBreak();
+writeInfo("Target repositories")
+  .andLines(repos)
+  .andBreak();
 
 const since =
   process.argv.slice(2) || new Date().toISOString().substring(0, 10);
 
+writeInfo(`Generating report from ${since}`).andBreak();
+
 getTeamReport(users, repos, since).then(report => {
-  console.log("---------------------------");
-  console.log("Report");
-  console.log("---------------------------");
   writeSimpleFormatToConsole(report);
 });
