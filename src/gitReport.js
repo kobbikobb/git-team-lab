@@ -1,20 +1,21 @@
 const { getUserLog, parseUserStats } = require("./gitUtils");
 
-async function getUserStatsForRepo(repo, user, since) {
+async function getUserStatsForRepo(repo, user, since, until) {
   const userLog = await getUserLog({
     path: repo,
     author: user,
-    since: since
+    since,
+    until
   });
 
   return parseUserStats(userLog);
 }
 
-async function getUserStatsForAllRepos(repos, user, since) {
+async function getUserStatsForAllRepos(repos, user, since, until) {
   const allUserStats = [];
   for (let i = 0; i < repos.length; i++) {
     const repo = repos[i];
-    const userStats = await getUserStatsForRepo(repo, user, since);
+    const userStats = await getUserStatsForRepo(repo, user, since, until);
     allUserStats.push(userStats);
   }
   return allUserStats;
@@ -42,12 +43,17 @@ function sumUserStats(allUserStats) {
   });
 }
 
-async function getTeamReport(users, repos, since) {
+async function getTeamReport(users, repos, since, until) {
   const report = {};
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
 
-    const allUserStats = await getUserStatsForAllRepos(repos, user, since);
+    const allUserStats = await getUserStatsForAllRepos(
+      repos,
+      user,
+      since,
+      until
+    );
 
     report[user] = sumUserStats(allUserStats);
   }

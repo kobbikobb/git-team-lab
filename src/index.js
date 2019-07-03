@@ -21,11 +21,50 @@ writeInfo("Target repositories")
   .andLines(repos)
   .andBreak();
 
-const since =
-  process.argv.slice(2) || new Date().toISOString().substring(0, 10);
+function toIso(date) {
+  return date.toISOString().substring(0, 10);
+}
 
-writeInfo(`Generating report from ${since}`).andBreak();
+function addMonth(date) {
+  return new Date(new Date(date).setMonth(date.getMonth() + 1));
+}
 
-getTeamReport(users, repos, since).then(report => {
-  writeSimpleFormatToConsole(report);
-});
+function getReportDateRanges() {
+  const since = process.argv[2];
+  const interval = process.argv[3];
+
+  if (interval === "month") {
+    const dateRanges = [];
+
+    let targetDate = new Date(since);
+
+    while (targetDate < new Date()) {
+      dateRanges.push({
+        since: toIso(targetDate),
+        until: toIso(addMonth(targetDate))
+      });
+      targetDate = addMonth(targetDate);
+    }
+
+    return dateRanges;
+  }
+
+  return [
+    {
+      since: since || toIso(new Date()),
+      until: null
+    }
+  ];
+}
+async function doReport() {
+  const dateRanges = getReportDateRanges();
+
+  for (let i = 0; i < dateRanges.length; i++) {
+    const { since, until } = dateRanges[i];
+    writeInfo(`Generating report since ${since} until ${until}.`).andBreak();
+    const report = await getTeamReport(users, repos, since, until);
+    writeSimpleFormatToConsole(report);
+  }
+}
+
+doReport();

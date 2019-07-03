@@ -95,13 +95,13 @@ function parseUserStats(userLogs) {
     }],
     total: 3,
 } */
-function getUserLog({ path, author, since }) {
+function getUserLog({ path, author, since, until }) {
   return new Promise((resolve, reject) => {
     git(path).log(
       [
         `--author=${author}`,
         `--since=${since}`,
-        `--until=${"2019-07-01"}`,
+        `--until=${until}`,
         "--no-merges",
         "--shortstat"
       ],
