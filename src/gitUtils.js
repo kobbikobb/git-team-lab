@@ -98,7 +98,13 @@ function parseUserStats(userLogs) {
 function getUserLog({ path, author, since }) {
   return new Promise((resolve, reject) => {
     git(path).log(
-      [`--author=${author}`, `--since=${since}`, "--no-merges", "--shortstat"],
+      [
+        `--author=${author}`,
+        `--since=${since}`,
+        `--until=${"2019-07-01"}`,
+        "--no-merges",
+        "--shortstat"
+      ],
       (err, result) => {
         if (err) {
           reject(err);
