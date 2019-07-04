@@ -102,8 +102,8 @@ function getUserLog({ path, author, since, until }) {
         `--author=${author}`,
         `--since=${since}`,
         `--until=${until}`,
-        "--no-merges",
-        "--shortstat"
+        "--shortstat",
+        "--all"
       ],
       (err, result) => {
         if (err) {
