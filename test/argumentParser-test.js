@@ -34,8 +34,26 @@ describe("argumentParser", () => {
     });
   });
 
+  describe("when parsing date with daily internval", () => {
+    it("should return days since that day", () => {
+      const since = "2018-12-28";
+      const arguments = ["", "", since, "day"];
+
+      const result = getDateRanges(arguments, TODAY);
+
+      const expected = [
+        { since: "2018-12-28", until: "2018-12-29" },
+        { since: "2018-12-29", until: "2018-12-30" },
+        { since: "2018-12-30", until: "2018-12-31" },
+        { since: "2018-12-31", until: "2019-01-01" }
+      ];
+      expect(result.length).to.be.equal(4);
+      expect(result).to.be.deep.equal(expected);
+    });
+  });
+
   describe("when parsing date with weekly internval", () => {
-    it("should return since that day", () => {
+    it("should return weeks since that day", () => {
       const since = "2018-12-15";
       const arguments = ["", "", since, "week"];
 
@@ -52,7 +70,7 @@ describe("argumentParser", () => {
   });
 
   describe("when parsing date with monthly internval", () => {
-    it("should return since that day", () => {
+    it("should return months since that day", () => {
       const since = "2018-10-15";
       const arguments = ["", "", since, "month"];
 

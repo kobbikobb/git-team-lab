@@ -2,15 +2,22 @@ function toIso(date) {
   return date.toISOString().substring(0, 10);
 }
 
-function addMonth(date) {
-  return new Date(new Date(date).setMonth(date.getMonth() + 1));
+function addDay(date) {
+  return new Date(new Date(date).setDate(date.getDate() + 1));
 }
 
 function addWeek(date) {
   return new Date(new Date(date).setDate(date.getDate() + 7));
 }
 
+function addMonth(date) {
+  return new Date(new Date(date).setMonth(date.getMonth() + 1));
+}
+
 function addInterval(date, interval) {
+  if (interval === "day") {
+    return addDay(date);
+  }
   if (interval === "week") {
     return addWeek(date);
   }
