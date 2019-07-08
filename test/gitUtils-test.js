@@ -3,8 +3,7 @@ var { expect } = require("chai");
 const {
   parseShortstat,
   parseIssueKey,
-  parseUserStats,
-  getUserLog
+  parseUserStats
 } = require("../src/gitUtils");
 
 function aLog(

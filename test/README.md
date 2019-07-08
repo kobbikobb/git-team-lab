@@ -24,7 +24,13 @@ Get a report for today
 node ./src/index.js
 
 Get a report since a day
-node ./src/index.js '2008-01-01'
+node ./src/index.js 2008-01-01
+
+Get a report since a day, with montly intervals
+node ./src/index.js 2008-01-01 month
+
+Get a report since a day, with weekly intervals
+node ./src/index.js 2008-01-01 week
 
 ## Run tests
 
