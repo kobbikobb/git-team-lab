@@ -12,10 +12,8 @@ async function getUserStatsForRepo(repo, user, since, until) {
     until: until ? appendStartOfDayToIsoDate(until) : undefined
   });
 
-  console.log(userLog);
+  // TODO: Clean up
 
-  console.log(since ? appendStartOfDayToIsoDate(since) : undefined);
-  console.log(until ? appendStartOfDayToIsoDate(until) : undefined);
   return parseUserStats(userLog);
 }
 

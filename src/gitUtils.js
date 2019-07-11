@@ -16,6 +16,8 @@ function parseShortstat(hash) {
     return null;
   }
 
+  // TODO: Cleanup
+
   const results = {
     numberOfFiles: parseInt(filesMatches[1], 10),
     numberOfNewLines: 0,
