@@ -32,6 +32,18 @@ describe("gitUtils", () => {
         numberOfDeletedLines: 62
       });
     });
+    it("should read all fields simple", () => {
+      const hash = "1 file changed, 3 insertions(+), 4 deletions(-)";
+
+      const result = parseShortstat(hash);
+
+      expect(result).to.deep.equal({
+        numberOfFiles: 1,
+        numberOfNewLines: 3,
+        numberOfDeletedLines: 4
+      });
+    });
+
     it("should return null if not matched", () => {
       const hash = "No match";
       const result = parseShortstat(hash);
@@ -42,14 +54,14 @@ describe("gitUtils", () => {
       const result = parseShortstat(hash);
       expect(result).to.equal(null);
     });
-    it("should read ionsertions only", () => {
-      const hash = "22 files changed, 93 insertions(+)";
+    it("should read insertions only", () => {
+      const hash = "1 file changed, 7 insertions(+)";
 
       const result = parseShortstat(hash);
 
       expect(result).to.deep.equal({
-        numberOfFiles: 22,
-        numberOfNewLines: 93,
+        numberOfFiles: 1,
+        numberOfNewLines: 7,
         numberOfDeletedLines: 0
       });
     });

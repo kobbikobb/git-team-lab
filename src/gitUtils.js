@@ -1,6 +1,6 @@
 const git = require("simple-git");
 
-const FILES_REGEX = /([0-9]*) files changed*/;
+const FILES_REGEX = /([0-9]*) file[sS]? changed*/;
 const INSERTIONS_REGEX = /([0-9]*) insertions\(\+\)*/;
 const DELETIONS_REGEX = /([0-9]*) deletions\(\-\)*/;
 const ISSUE_REGEX = /^(([A-Z]*)\-?([0-9]*)) _*/;
