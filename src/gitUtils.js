@@ -1,6 +1,8 @@
 const git = require("simple-git");
 
-const SHORTSTAT_REGEX = /([0-9]*) files changed, ([0-9]*) insertions\(\+\), ([0-9]*) deletions\(\-\)_*/;
+const FILES_REGEX = /([0-9]*) files changed*/;
+const INSERTIONS_REGEX = /([0-9]*) insertions\(\+\)*/;
+const DELETIONS_REGEX = /([0-9]*) deletions\(\-\)*/;
 const ISSUE_REGEX = /^(([A-Z]*)\-?([0-9]*)) _*/;
 
 /* Returns a object with shortstat from hash string */
@@ -8,15 +10,29 @@ function parseShortstat(hash) {
   if (hash === null) {
     return null;
   }
-  const matches = hash.match(SHORTSTAT_REGEX);
-  if (matches < 4) {
+
+  const filesMatches = hash.match(FILES_REGEX);
+  if (!filesMatches) {
     return null;
   }
-  return {
-    numberOfFiles: parseInt(matches[1], 10),
-    numberOfNewLines: parseInt(matches[2], 10),
-    numberOfDeletedLines: parseInt(matches[3], 10)
+
+  const results = {
+    numberOfFiles: parseInt(filesMatches[1], 10),
+    numberOfNewLines: 0,
+    numberOfDeletedLines: 0
   };
+
+  const insertionsMatches = hash.match(INSERTIONS_REGEX);
+  if (insertionsMatches) {
+    results.numberOfNewLines = parseInt(insertionsMatches[1], 10);
+  }
+
+  const deletionsMatches = hash.match(DELETIONS_REGEX);
+  if (deletionsMatches) {
+    results.numberOfDeletedLines = parseInt(deletionsMatches[1], 10);
+  }
+
+  return results;
 }
 
 /* Parse a issue key from a message */

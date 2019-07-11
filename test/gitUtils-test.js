@@ -33,7 +33,7 @@ describe("gitUtils", () => {
       });
     });
     it("should return null if not matched", () => {
-      const hash = "22 files changed, 93 insertions(+)";
+      const hash = "No match";
       const result = parseShortstat(hash);
       expect(result).to.equal(null);
     });
@@ -41,6 +41,28 @@ describe("gitUtils", () => {
       const hash = null;
       const result = parseShortstat(hash);
       expect(result).to.equal(null);
+    });
+    it("should read ionsertions only", () => {
+      const hash = "22 files changed, 93 insertions(+)";
+
+      const result = parseShortstat(hash);
+
+      expect(result).to.deep.equal({
+        numberOfFiles: 22,
+        numberOfNewLines: 93,
+        numberOfDeletedLines: 0
+      });
+    });
+    it("should read deletes only", () => {
+      const hash = "22 files changed, 62 deletions(-)";
+
+      const result = parseShortstat(hash);
+
+      expect(result).to.deep.equal({
+        numberOfFiles: 22,
+        numberOfNewLines: 0,
+        numberOfDeletedLines: 62
+      });
     });
   });
 
