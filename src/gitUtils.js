@@ -1,9 +1,33 @@
 const git = require("simple-git");
 
 const FILES_REGEX = /([0-9]*) file[sS]? changed*/;
-const INSERTIONS_REGEX = /([0-9]*) insertions\(\+\)*/;
-const DELETIONS_REGEX = /([0-9]*) deletions\(\-\)*/;
+const INSERTIONS_REGEX = /([0-9]*) insertion[sS]?\(\+\)*/;
+const DELETIONS_REGEX = /([0-9]*) deletion[sS]?\(\-\)*/;
 const ISSUE_REGEX = /^(([A-Z]*)\-?([0-9]*)) _*/;
+
+function getNumberOfFiles(hash) {
+  const filesMatches = hash.match(FILES_REGEX);
+  if (!filesMatches) {
+    return 0;
+  }
+  return parseInt(filesMatches[1], 10);
+}
+
+function getNumberOfNewLines(hash) {
+  const insertionsMatches = hash.match(INSERTIONS_REGEX);
+  if (!insertionsMatches) {
+    return 0;
+  }
+  return parseInt(insertionsMatches[1], 10);
+}
+
+function getNumberOfDeletedLines(hash) {
+  const deletionsMatches = hash.match(DELETIONS_REGEX);
+  if (!deletionsMatches) {
+    return 0;
+  }
+  return parseInt(deletionsMatches[1], 10);
+}
 
 /* Returns a object with shortstat from hash string */
 function parseShortstat(hash) {
@@ -11,30 +35,11 @@ function parseShortstat(hash) {
     return null;
   }
 
-  const filesMatches = hash.match(FILES_REGEX);
-  if (!filesMatches) {
-    return null;
-  }
-
-  // TODO: Cleanup
-
-  const results = {
-    numberOfFiles: parseInt(filesMatches[1], 10),
-    numberOfNewLines: 0,
-    numberOfDeletedLines: 0
+  return {
+    numberOfFiles: getNumberOfFiles(hash),
+    numberOfNewLines: getNumberOfNewLines(hash),
+    numberOfDeletedLines: getNumberOfDeletedLines(hash)
   };
-
-  const insertionsMatches = hash.match(INSERTIONS_REGEX);
-  if (insertionsMatches) {
-    results.numberOfNewLines = parseInt(insertionsMatches[1], 10);
-  }
-
-  const deletionsMatches = hash.match(DELETIONS_REGEX);
-  if (deletionsMatches) {
-    results.numberOfDeletedLines = parseInt(deletionsMatches[1], 10);
-  }
-
-  return results;
 }
 
 /* Parse a issue key from a message */
@@ -121,7 +126,7 @@ function getUserLog({ path, author, since, until }) {
         `--since=${since}`,
         `--until=${until}`,
         "--shortstat",
-        "--all"
+        "--all" // All Branches
       ],
       (err, result) => {
         if (err) {
