@@ -1,18 +1,12 @@
 const { getUserLog, parseUserStats } = require("./gitUtils");
 
-function appendStartOfDayToIsoDate(date) {
-  return date + " 00:00:00 +0000";
-}
-
 async function getUserStatsForRepo(repo, user, since, until) {
   const userLog = await getUserLog({
     path: repo,
     author: user,
-    since: since ? appendStartOfDayToIsoDate(since) : undefined,
-    until: until ? appendStartOfDayToIsoDate(until) : undefined
+    since: since,
+    until: until
   });
-
-  // TODO: Clean up
 
   return parseUserStats(userLog);
 }
