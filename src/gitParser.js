@@ -32,7 +32,6 @@ function parseShortstat(hash) {
   if (hash === null) {
     return null;
   }
-
   return {
     numberOfFiles: getNumberOfFiles(hash),
     numberOfNewLines: getNumberOfNewLines(hash),
@@ -97,14 +96,12 @@ function countNumberOfIssues(logs) {
     numberOfFiles: 3,
 } */
 function parseUserStats(userLogs) {
-  const { all } = userLogs;
-
-  const shortstatsSum = sumShortstats(all);
+  const shortstatsSum = sumShortstats(userLogs);
 
   return {
     ...shortstatsSum,
-    numberOfIssues: countNumberOfIssues(all),
-    numberOfCommits: all.length
+    numberOfIssues: countNumberOfIssues(userLogs),
+    numberOfCommits: userLogs.length
   };
 }
 

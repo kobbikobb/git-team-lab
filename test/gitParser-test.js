@@ -101,26 +101,20 @@ describe("gitParser", () => {
 
   describe("when logs are parsed", () => {
     it("should count multiple logs", () => {
-      const logs = {
-        all: [aLog(), aLog(), aLog()]
-      };
-
+      const logs = [aLog(), aLog(), aLog()];
       const result = parseUserStats(logs);
-
       expect(result.numberOfCommits).to.equal(3);
     });
 
     it("should sum shortstat", () => {
-      const logs = {
-        all: [
-          aLog(
-            "2 files changed, 9 insertions(+), 6 deletions(-)\n\n38acece884941597ffcb56640af4a390e6034d52"
-          ),
-          aLog(
-            "7 files changed, 1 insertions(+), 5 deletions(-)\n\n38acece884941597ffcb56640af4a390e6034d52"
-          )
-        ]
-      };
+      const logs = [
+        aLog(
+          "2 files changed, 9 insertions(+), 6 deletions(-)\n\n38acece884941597ffcb56640af4a390e6034d52"
+        ),
+        aLog(
+          "7 files changed, 1 insertions(+), 5 deletions(-)\n\n38acece884941597ffcb56640af4a390e6034d52"
+        )
+      ];
 
       const result = parseUserStats(logs);
 
@@ -130,14 +124,12 @@ describe("gitParser", () => {
     });
 
     it("should sum shortstat even if not all have valid hash", () => {
-      const logs = {
-        all: [
-          aLog(
-            "2 files changed, 9 insertions(+), 6 deletions(-)\n\n38acece884941597ffcb56640af4a390e6034d52"
-          ),
-          aLog("Invalid hash")
-        ]
-      };
+      const logs = [
+        aLog(
+          "2 files changed, 9 insertions(+), 6 deletions(-)\n\n38acece884941597ffcb56640af4a390e6034d52"
+        ),
+        aLog("Invalid hash")
+      ];
 
       const result = parseUserStats(logs);
 
@@ -147,9 +139,7 @@ describe("gitParser", () => {
     });
 
     it("should return 0 shortstat if nothing valid", () => {
-      const logs = {
-        all: [aLog("Invalid hash")]
-      };
+      const logs = [aLog("Invalid hash")];
 
       const result = parseUserStats(logs);
 
@@ -159,14 +149,12 @@ describe("gitParser", () => {
     });
 
     it("should count number of unique issues", () => {
-      const logs = {
-        all: [
-          aLog(null, null, "TUI-123 Bankok"),
-          aLog(null, null, "TUI-123 Bankok"),
-          aLog(null, null, "1234 Bankok"),
-          aLog(null, null, "Nothing at all")
-        ]
-      };
+      const logs = [
+        aLog(null, null, "TUI-123 Bankok"),
+        aLog(null, null, "TUI-123 Bankok"),
+        aLog(null, null, "1234 Bankok"),
+        aLog(null, null, "Nothing at all")
+      ];
 
       const result = parseUserStats(logs);
 
