@@ -1,25 +1,13 @@
 var { expect } = require("chai");
+var { aLog } = require("./testUtils");
 
 const {
   parseShortstat,
   parseIssueKey,
-  parseUserStats,
-  withShortstatShiftedUp
-} = require("../src/gitUtils");
+  parseUserStats
+} = require("../src/gitParser");
 
-function aLog(
-  hash = "2 files changed, 9 insertions(+), 6 deletions(-)",
-  date = "2019-06-30 23:57:58 +0000",
-  message = "First commit"
-) {
-  return {
-    hash,
-    date,
-    message
-  };
-}
-
-describe("gitUtils", () => {
+describe("gitParser", () => {
   describe("when parsing shortstat", () => {
     it("should read from matched string", () => {
       const hash =
@@ -183,32 +171,6 @@ describe("gitUtils", () => {
       const result = parseUserStats(logs);
 
       expect(result.numberOfIssues).to.equal(2);
-    });
-  });
-
-  describe("When shifting logs", () => {
-    it("should fix a bug where shortstat is shifted by shifting back", () => {
-      const logs = {
-        all: [
-          aLog("45aa8054ca2630324a6ec00f5b0e47c3a8d5c3e6"),
-          aLog(
-            "1 file changed, 2 deletions(-)\n\nf3cbe7c0d713120ec054eb2744957138874330d6"
-          ),
-          aLog("1 file changed, 16 insertions(+), 14 deletions(-)", "", "")
-        ],
-        total: 3
-      };
-
-      const result = withShortstatShiftedUp(logs);
-
-      expect(result.all.length).to.equal(2);
-      expect(result.total).to.equal(2);
-      expect(result.all[0].hash).to.equal(
-        "1 file changed, 2 deletions(-)\n\n45aa8054ca2630324a6ec00f5b0e47c3a8d5c3e6"
-      );
-      expect(result.all[1].hash).to.equal(
-        "1 file changed, 16 insertions(+), 14 deletions(-)\n\nf3cbe7c0d713120ec054eb2744957138874330d6"
-      );
     });
   });
 });

@@ -1,4 +1,5 @@
-const { getUserLog, parseUserStats } = require("./gitUtils");
+const { getUserLog } = require("./gitReader");
+const { parseUserStats } = require("./gitParser");
 
 async function getUserStatsForRepo(repo, user, since, until) {
   const userLog = await getUserLog({
