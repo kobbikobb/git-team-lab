@@ -44,6 +44,36 @@ function writeSimpleFormatToConsole(report) {
   andBreak();
 }
 
+function writeReportByDateToConsole(report) {
+  let header = stringColumn("Date");
+  const firstDate = Object.keys(report)[0];
+  for (user in report[firstDate]) {
+    header += stringColumn(user);
+  }
+
+  writeHeader(header);
+
+  for (date in report) {
+    const byDate = report[date];
+
+    let line = stringColumn(date);
+
+    for (user in byDate) {
+      if (!byDate[user]) {
+        line += stringColumn("");
+      } else {
+        const { numberOfNewLines, numberOfCommits } = byDate[user];
+
+        line += stringColumn(
+          numberOfCommits.toString() + " / " + numberOfNewLines.toString()
+        );
+      }
+    }
+    writeSubHeader(line);
+  }
+}
+
 module.exports = {
-  writeSimpleFormatToConsole
+  writeSimpleFormatToConsole,
+  writeReportByDateToConsole
 };

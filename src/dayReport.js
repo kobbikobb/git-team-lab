@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { getDateRanges } = require("./argumentParser");
-const { getReportByUser } = require("./gitReport");
-const { writeSimpleFormatToConsole } = require("./reportTemplate");
+const { getReportByDayThenUser } = require("./gitReport");
+const { writeReportByDateToConsole } = require("./reportTemplate");
 const { writeText, writeInfo } = require("./consoleWriter");
 
 writeText("Reading settings from users.txt and repos.txt").andBreak();
@@ -30,8 +30,8 @@ async function doReport() {
     writeInfo(
       `Generating report since ${since} until ${until || "..."}.`
     ).andBreak();
-    const report = await getReportByUser(users, repos, since, until);
-    writeSimpleFormatToConsole(report);
+    const report = await getReportByDayThenUser(users, repos, since, until);
+    writeReportByDateToConsole(report);
   }
 }
 

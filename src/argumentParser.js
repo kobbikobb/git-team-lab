@@ -1,18 +1,4 @@
-function toIso(date) {
-  return date.toISOString().substring(0, 10);
-}
-
-function addDay(date) {
-  return new Date(new Date(date).setDate(date.getDate() + 1));
-}
-
-function addWeek(date) {
-  return new Date(new Date(date).setDate(date.getDate() + 7));
-}
-
-function addMonth(date) {
-  return new Date(new Date(date).setMonth(date.getMonth() + 1));
-}
+const dateUtils = require("./dateUtils");
 
 function addInterval(date, interval) {
   if (interval === "day") {
@@ -40,20 +26,10 @@ function getDateRanges(arguments, todaysDate = new Date()) {
     ];
   }
 
-  const dateRanges = [];
-
-  let targetDate = new Date(since);
-
-  while (targetDate < todaysDate) {
-    const dateUntil = addInterval(targetDate, interval);
-    dateRanges.push({
-      since: toIso(targetDate),
-      until: toIso(dateUntil)
-    });
-    targetDate = dateUntil;
-  }
-
-  return dateRanges;
+  return dateUtils.getDateRanges(since, todaysDate, interval).map(date => {
+    since: date.fromDate;
+    until: date.toDate;
+  });
 }
 
 module.exports = {
