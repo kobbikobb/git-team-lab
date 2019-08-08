@@ -1,7 +1,7 @@
 const { writeHeader, writeSubHeader, andBreak } = require("./consoleWriter");
 
-function stringColumn(value) {
-  return value.padEnd(15);
+function stringColumn(value, size = 15) {
+  return value.padEnd(size);
 }
 
 function numberColumn(value) {
@@ -44,6 +44,44 @@ function writeSimpleFormatToConsole(report) {
   andBreak();
 }
 
+function writeReportToConsole(report) {
+  const intervalKeys = Object.keys(report);
+  const userKeys = Object.keys(report[intervalKeys[0]]);
+
+  let header = stringColumn("Date", 30);
+
+  userKeys.forEach(userKey => {
+    header += stringColumn(userKey, 30);
+  });
+
+  writeHeader(header);
+
+  for (intervalKey in report) {
+    const interval = report[intervalKey];
+
+    let line = stringColumn(intervalKey, 30);
+
+    for (userKey in interval) {
+      const userStats = interval[userKey];
+
+      const {
+        numberOfNewLines,
+        numberOfDeletedLines,
+        numberOfCommits,
+        numberOfIssues
+      } = userStats;
+
+      line += stringColumn(
+        `+${numberOfNewLines}/-${numberOfDeletedLines} c${numberOfCommits}/i${numberOfIssues}`,
+        30
+      );
+    }
+
+    writeSubHeader(line);
+  }
+}
+
 module.exports = {
-  writeSimpleFormatToConsole
+  writeSimpleFormatToConsole,
+  writeReportToConsole
 };

@@ -4,7 +4,6 @@ const { parseUserStats } = require("./gitParser");
 async function getTeamReport(users, repos, since, until) {
   const report = {};
   const allLogsPerUser = await getAllLogsPerUser(users, repos, since, until);
-  console.log(allLogsPerUser);
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     report[user] = parseUserStats(allLogsPerUser[user]);
@@ -31,7 +30,6 @@ async function getReport(users, repos, dateInterval) {
     dateInterval.since,
     dateInterval.until
   );
-  console.log(allLogsPerUser);
   const report = {};
   dateInterval.intervals.forEach(interval => {
     report[interval.key] = getReportInterval(allLogsPerUser, users, interval);

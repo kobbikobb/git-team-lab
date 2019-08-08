@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { getDateInterval } = require("./argumentParser2");
 const { getReport } = require("./gitReport");
-const { writeSimpleFormatToConsole } = require("./reportTemplate");
+const { writeReportToConsole } = require("./reportTemplate");
 const { writeText, writeInfo } = require("./consoleWriter");
 
 writeText("Reading settings from users.txt and repos.txt").andBreak();
@@ -31,7 +31,7 @@ async function doReport() {
   ).andBreak();
 
   const report = await getReport(users, repos, dateInterval);
-  console.log(report);
+  writeReportToConsole(report);
 }
 
 doReport();
