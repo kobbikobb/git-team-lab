@@ -71,10 +71,19 @@ function writeReportToConsole(report) {
         numberOfIssues
       } = userStats;
 
-      line += stringColumn(
-        `+${numberOfNewLines}/-${numberOfDeletedLines} c${numberOfCommits}/i${numberOfIssues}`,
-        30
-      );
+      if (
+        numberOfNewLines === 0 &&
+        numberOfDeletedLines === 0 &&
+        numberOfCommits === 0 &&
+        numberOfIssues === 0
+      ) {
+        line += stringColumn("", 30);
+      } else {
+        line += stringColumn(
+          `+${numberOfNewLines}/-${numberOfDeletedLines} c${numberOfCommits}/i${numberOfIssues}`,
+          30
+        );
+      }
     }
 
     writeSubHeader(line);
