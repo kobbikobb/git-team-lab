@@ -27,11 +27,11 @@ function addInterval(date, interval) {
   throw new Error(`Interval ${interval} not supported`);
 }
 
-function forSingleDay(targetDate) {
+function forSingleDay(targetDate, todaysDate = new Date()) {
   return [
     {
       since: toIso(targetDate),
-      until: null
+      until: toIso(addInterval(todaysDate, "day"))
     }
   ];
 }

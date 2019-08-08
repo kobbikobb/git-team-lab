@@ -3,9 +3,10 @@ var { expect } = require("chai");
 const { getDateRanges } = require("../src/argumentParser");
 
 const TODAY = new Date("2019-01-01");
+const TOMORROW = new Date("2019-01-02");
 
-function todayAsIso() {
-  return TODAY.toISOString().substring(0, 10);
+function toIso(date) {
+  return date.toISOString().substring(0, 10);
 }
 
 describe("argumentParser", () => {
@@ -16,8 +17,8 @@ describe("argumentParser", () => {
       const result = getDateRanges(arguments, TODAY);
 
       expect(result.length).to.be.equal(1);
-      expect(result[0].since).to.be.equal(todayAsIso());
-      expect(result[0].until).to.be.null;
+      expect(result[0].since).to.be.equal(toIso(TODAY));
+      expect(result[0].until).to.be.equal(toIso(TOMORROW));
     });
   });
 
@@ -30,7 +31,7 @@ describe("argumentParser", () => {
 
       expect(result.length).to.be.equal(1);
       expect(result[0].since).to.be.equal(since);
-      expect(result[0].until).to.be.null;
+      expect(result[0].until).to.be.equal(toIso(TOMORROW));
     });
   });
 

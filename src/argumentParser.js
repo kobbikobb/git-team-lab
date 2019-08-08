@@ -5,7 +5,7 @@ function getDateRanges(arguments, todaysDate = new Date()) {
   const interval = arguments[3];
 
   if (!interval) {
-    return forSingleDay(since ? new Date(since) : todaysDate);
+    return forSingleDay(since ? new Date(since) : todaysDate, todaysDate);
   }
 
   return forDateRange(new Date(since), todaysDate, interval);
