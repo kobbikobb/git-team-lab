@@ -74,15 +74,15 @@ function writeReportToConsole(report) {
       if (
         numberOfNewLines === 0 &&
         numberOfDeletedLines === 0 &&
-        numberOfCommits === 0 &&
         numberOfIssues === 0
       ) {
         line += stringColumn("", 30);
       } else {
         line += stringColumn(
-          `+${numberOfNewLines}/-${numberOfDeletedLines} c${numberOfCommits}/i${numberOfIssues}`,
-          30
+          `+${numberOfNewLines} / -${numberOfDeletedLines}`,
+          22
         );
+        line += stringColumn(`i:${numberOfIssues}`, 8);
       }
     }
 
