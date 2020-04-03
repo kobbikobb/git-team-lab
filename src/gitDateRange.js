@@ -14,6 +14,12 @@ function addMonth(date) {
   return new Date(new Date(date).setMonth(date.getMonth() + 1));
 }
 
+function addYear(date) {
+  const nextYear = new Date(date);
+  nextYear.setFullYear(nextYear.getFullYear() + 1);
+  return nextYear;
+}
+
 function addInterval(date, interval) {
   if (interval === "day") {
     return addDay(date);
@@ -23,6 +29,9 @@ function addInterval(date, interval) {
   }
   if (interval === "month") {
     return addMonth(date);
+  }
+  if (interval === "year") {
+    return addYear(date);
   }
   throw new Error(`Interval ${interval} not supported`);
 }

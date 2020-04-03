@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { getDateRanges } = require("./argumentParser");
+const { getDateInterval } = require("./argumentParser2");
 const { getTeamReport } = require("./gitReport");
 const { writeSimpleFormatToConsole } = require("./reportTemplate");
 const { writeText, writeInfo } = require("./consoleWriter");
@@ -23,10 +23,11 @@ writeInfo("Target repositories")
   .andBreak();
 
 async function doReport() {
-  const dateRanges = getDateRanges(process.argv);
+  const dateInterval = getDateInterval(process.argv);
 
-  for (let i = 0; i < dateRanges.length; i++) {
-    const { since, until } = dateRanges[i];
+  for (let i = 0; i < dateInterval.intervals.length; i++) {
+    const interval = dateInterval.intervals[i];
+    const { since, until } = interval;
     writeInfo(
       `Generating report since ${since} until ${until || "..."}.`
     ).andBreak();

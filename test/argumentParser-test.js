@@ -86,4 +86,16 @@ describe("argumentParser", () => {
       expect(result).to.be.deep.equal(expected);
     });
   });
+
+  describe("when parsing date with yearly internval", () => {
+    it("should return years since that day", () => {
+      const since = "2018-10-15";
+      const arguments = ["", "", since, "year"];
+
+      const result = getDateRanges(arguments, TODAY);
+
+      const expected = [{ since: "2018-10-15", until: "2019-10-15" }];
+      expect(result).to.be.deep.equal(expected);
+    });
+  });
 });

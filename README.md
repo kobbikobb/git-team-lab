@@ -35,6 +35,9 @@ node ./src/index.js 2008-01-01 week
 Get a report since a day, with montly intervals
 node ./src/index.js 2008-01-01 month
 
+Get a report since a day, with yearly intervals
+node ./src/index.js 2008-01-01 year
+
 ## Run tests
 
 npm run test
