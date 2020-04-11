@@ -8,6 +8,10 @@ function numberColumn(value) {
   return value.toString().padStart(15);
 }
 
+function csvColumn(value) {
+  return value + ";";
+}
+
 function writeSimpleFormatToConsole(report) {
   const header =
     stringColumn("Username") +
@@ -20,14 +24,13 @@ function writeSimpleFormatToConsole(report) {
   writeHeader(header);
 
   const userNames = Object.keys(report);
-
-  userNames.forEach(userName => {
+  userNames.forEach((userName) => {
     const {
       numberOfFiles,
       numberOfNewLines,
       numberOfDeletedLines,
       numberOfCommits,
-      numberOfIssues
+      numberOfIssues,
     } = report[userName];
 
     const line =
@@ -50,7 +53,7 @@ function writeReportToConsole(report) {
 
   let header = stringColumn("Date", 30);
 
-  userKeys.forEach(userKey => {
+  userKeys.forEach((userKey) => {
     header += stringColumn(userKey, 30);
   });
 
@@ -68,7 +71,7 @@ function writeReportToConsole(report) {
         numberOfNewLines,
         numberOfDeletedLines,
         numberOfCommits,
-        numberOfIssues
+        numberOfIssues,
       } = userStats;
 
       if (
@@ -90,7 +93,43 @@ function writeReportToConsole(report) {
   }
 }
 
+function writeCsvToConsole(report) {
+  const header =
+    csvColumn("Username") +
+    csvColumn("Files") +
+    csvColumn("New Lines") +
+    csvColumn("Deleted Lines") +
+    csvColumn("Commits") +
+    csvColumn("Issues");
+
+  writeHeader(header);
+
+  const userNames = Object.keys(report);
+  userNames.forEach((userName) => {
+    const {
+      numberOfFiles,
+      numberOfNewLines,
+      numberOfDeletedLines,
+      numberOfCommits,
+      numberOfIssues,
+    } = report[userName];
+
+    const line =
+      csvColumn(userName) +
+      csvColumn(numberOfFiles) +
+      csvColumn(numberOfNewLines) +
+      csvColumn(numberOfDeletedLines) +
+      csvColumn(numberOfCommits) +
+      csvColumn(numberOfIssues);
+
+    writeSubHeader(line);
+  });
+
+  andBreak();
+}
+
 module.exports = {
   writeSimpleFormatToConsole,
-  writeReportToConsole
+  writeCsvToConsole,
+  writeReportToConsole,
 };

@@ -35,7 +35,7 @@ function parseShortstat(hash) {
   return {
     numberOfFiles: getNumberOfFiles(hash),
     numberOfNewLines: getNumberOfNewLines(hash),
-    numberOfDeletedLines: getNumberOfDeletedLines(hash)
+    numberOfDeletedLines: getNumberOfDeletedLines(hash),
   };
 }
 
@@ -52,34 +52,94 @@ function parseIssueKey(message) {
   return matches[1];
 }
 
-/* Given a array of logs, calculates the shortstat sum for them */
-function sumShortstats(logs) {
-  const shortstats = logs
-    .map(log => parseShortstat(log.hash))
-    .filter(log => log !== null);
+function getEmptyShortstats() {
+  return {
+    numberOfFiles: 0,
+    numberOfNewLines: 0,
+    numberOfDeletedLines: 0,
+  };
+}
 
-  if (shortstats.length === 0) {
-    return {
-      numberOfFiles: 0,
-      numberOfNewLines: 0,
-      numberOfDeletedLines: 0
-    };
-  }
+function getShortstats(logs) {
+  return logs
+    .map((log) => parseShortstat(log.hash))
+    .filter((log) => log !== null);
+}
 
+function sumShortstats(shortstats) {
   return shortstats.reduce((a, b) => {
     return {
       numberOfFiles: a.numberOfFiles + b.numberOfFiles,
       numberOfNewLines: a.numberOfNewLines + b.numberOfNewLines,
-      numberOfDeletedLines: a.numberOfDeletedLines + b.numberOfDeletedLines
+      numberOfDeletedLines: a.numberOfDeletedLines + b.numberOfDeletedLines,
     };
   });
 }
 
+function sumShortstatsFromLogs(logs) {
+  const shortstats = getShortstats(logs);
+  if (shortstats.length === 0) {
+    return getEmptyShortstats();
+  }
+
+  return sumShortstats(shortstats);
+}
+
+function avgShortstatsFromLogs(logs) {
+  const shortstats = getShortstats(logs);
+  if (shortstats.length === 0) {
+    return getEmptyShortstats();
+  }
+  const sum = sumShortstats(shortstats);
+  const avg = (i) => (i > 0 ? Math.round(i / shortstats.length) : 0);
+  return {
+    numberOfFiles: avg(sum.numberOfFiles),
+    numberOfNewLines: avg(sum.numberOfNewLines),
+    numberOfDeletedLines: avg(sum.numberOfDeletedLines),
+  };
+}
+
+function sorted(arr) {
+  arr.sort((a, b) => a - b);
+  return arr;
+}
+
+function medShortstatsFromLogs(logs) {
+  const shortstats = getShortstats(logs);
+  if (shortstats.length === 0) {
+    return getEmptyShortstats();
+  }
+
+  const numberOfFiles = sorted(shortstats.map((s) => s.numberOfFiles));
+  const numberOfNewLines = sorted(shortstats.map((s) => s.numberOfNewLines));
+  const numberOfDeletedLines = sorted(
+    shortstats.map((s) => s.numberOfDeletedLines)
+  );
+
+  const med = (arr) => {
+    if (arr.length === 0) {
+      return 0;
+    }
+    if (arr.length === 1) {
+      return arr[0];
+    }
+    return arr[Math.round(arr.length / 2)];
+  };
+
+  return {
+    numberOfFiles: med(numberOfFiles),
+    numberOfNewLines: med(numberOfNewLines),
+    numberOfDeletedLines: med(numberOfDeletedLines),
+  };
+}
+
+// TODO: median
+
 /* Given a array of logs, counts the number of unique issues */
 function countNumberOfIssues(logs) {
   const issueKeys = logs
-    .map(log => parseIssueKey(log.message))
-    .filter(issueKey => issueKey !== null);
+    .map((log) => parseIssueKey(log.message))
+    .filter((issueKey) => issueKey !== null);
 
   if (issueKeys.length < 1) {
     return 0;
@@ -95,19 +155,33 @@ function countNumberOfIssues(logs) {
     numberOfDeletedLines: 344,
     numberOfFiles: 3,
 } */
-function parseUserStats(userLogs) {
-  const shortstatsSum = sumShortstats(userLogs);
-
+function toUserStats(shortstats, userLogs) {
   return {
-    ...shortstatsSum,
+    ...shortstats,
     numberOfIssues: countNumberOfIssues(userLogs),
-    numberOfCommits: userLogs.length
+    numberOfCommits: userLogs.length,
   };
+}
+
+function sumUserStats(userLogs) {
+  const shortstats = sumShortstatsFromLogs(userLogs);
+  return toUserStats(shortstats, userLogs);
+}
+
+function avgUserStats(userLogs) {
+  const shortstats = avgShortstatsFromLogs(userLogs);
+  return toUserStats(shortstats, userLogs);
+}
+
+function medUserStats(userLogs) {
+  const shortstats = medShortstatsFromLogs(userLogs);
+  return toUserStats(shortstats, userLogs);
 }
 
 module.exports = {
   parseShortstat,
   parseIssueKey,
-  sumShortstats,
-  parseUserStats
+  sumUserStats,
+  avgUserStats,
+  medUserStats,
 };

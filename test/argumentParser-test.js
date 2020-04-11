@@ -46,7 +46,7 @@ describe("argumentParser", () => {
         { since: "2018-12-28", until: "2018-12-29" },
         { since: "2018-12-29", until: "2018-12-30" },
         { since: "2018-12-30", until: "2018-12-31" },
-        { since: "2018-12-31", until: "2019-01-01" }
+        { since: "2018-12-31", until: "2019-01-01" },
       ];
       expect(result.length).to.be.equal(4);
       expect(result).to.be.deep.equal(expected);
@@ -63,7 +63,7 @@ describe("argumentParser", () => {
       const expected = [
         { since: "2018-12-15", until: "2018-12-22" },
         { since: "2018-12-22", until: "2018-12-29" },
-        { since: "2018-12-29", until: "2019-01-05" }
+        { since: "2018-12-29", until: "2019-01-05" },
       ];
       expect(result.length).to.be.equal(3);
       expect(result).to.be.deep.equal(expected);
@@ -80,7 +80,7 @@ describe("argumentParser", () => {
       const expected = [
         { since: "2018-10-15", until: "2018-11-15" },
         { since: "2018-11-15", until: "2018-12-15" },
-        { since: "2018-12-15", until: "2019-01-15" }
+        { since: "2018-12-15", until: "2019-01-15" },
       ];
       expect(result.length).to.be.equal(3);
       expect(result).to.be.deep.equal(expected);

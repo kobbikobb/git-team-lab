@@ -4,7 +4,7 @@ var { aLog } = require("./testUtils");
 const {
   parseShortstat,
   parseIssueKey,
-  parseUserStats
+  sumUserStats
 } = require("../src/gitParser");
 
 describe("gitParser", () => {
@@ -102,7 +102,7 @@ describe("gitParser", () => {
   describe("when logs are parsed", () => {
     it("should count multiple logs", () => {
       const logs = [aLog(), aLog(), aLog()];
-      const result = parseUserStats(logs);
+      const result = sumUserStats(logs);
       expect(result.numberOfCommits).to.equal(3);
     });
 
@@ -116,7 +116,7 @@ describe("gitParser", () => {
         )
       ];
 
-      const result = parseUserStats(logs);
+      const result = sumUserStats(logs);
 
       expect(result.numberOfFiles).to.equal(9);
       expect(result.numberOfNewLines).to.equal(10);
@@ -131,7 +131,7 @@ describe("gitParser", () => {
         aLog("Invalid hash")
       ];
 
-      const result = parseUserStats(logs);
+      const result = sumUserStats(logs);
 
       expect(result.numberOfFiles).to.equal(2);
       expect(result.numberOfNewLines).to.equal(9);
@@ -141,7 +141,7 @@ describe("gitParser", () => {
     it("should return 0 shortstat if nothing valid", () => {
       const logs = [aLog("Invalid hash")];
 
-      const result = parseUserStats(logs);
+      const result = sumUserStats(logs);
 
       expect(result.numberOfFiles).to.equal(0);
       expect(result.numberOfNewLines).to.equal(0);
@@ -156,7 +156,7 @@ describe("gitParser", () => {
         aLog(null, null, "Nothing at all")
       ];
 
-      const result = parseUserStats(logs);
+      const result = sumUserStats(logs);
 
       expect(result.numberOfIssues).to.equal(2);
     });

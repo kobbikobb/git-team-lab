@@ -1,29 +1,41 @@
 const { getAllLogsPerUser } = require("./gitAggregator");
-const { parseUserStats } = require("./gitParser");
+const { sumUserStats, avgUserStats, medUserStats } = require("./gitParser");
 
-async function getTeamReport(users, repos, since, until) {
+function getUserStatsParser(statsType) {
+  if (statsType === "avg") {
+    return avgUserStats;
+  }
+  if (statsType === "med") {
+    return medUserStats;
+  }
+  return sumUserStats;
+}
+
+async function getTeamReport(users, repos, since, until, statsType) {
   const report = {};
   const allLogsPerUser = await getAllLogsPerUser(users, repos, since, until);
+  const userStatsParser = getUserStatsParser(statsType);
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
-    report[user] = parseUserStats(allLogsPerUser[user]);
+    report[user] = userStatsParser(allLogsPerUser[user]);
   }
   return report;
 }
 
-function getReportInterval(allLogsPerUser, users, interval) {
+function getReportInterval(allLogsPerUser, users, interval, statsType) {
   const reportInterval = {};
-  users.forEach(user => {
+  const userStatsParser = getUserStatsParser(statsType);
+  users.forEach((user) => {
     const userLogs = allLogsPerUser[user];
-    const userLogsInInterval = userLogs.filter(log =>
+    const userLogsInInterval = userLogs.filter((log) =>
       interval.contains(log.date)
     );
-    reportInterval[user] = parseUserStats(userLogsInInterval);
+    reportInterval[user] = userStatsParser(userLogsInInterval);
   });
   return reportInterval;
 }
 
-async function getReport(users, repos, dateInterval) {
+async function getReport(users, repos, dateInterval, statsType) {
   const allLogsPerUser = await getAllLogsPerUser(
     users,
     repos,
@@ -31,14 +43,20 @@ async function getReport(users, repos, dateInterval) {
     dateInterval.until
   );
   const report = {};
-  dateInterval.intervals.forEach(interval => {
-    report[interval.key] = getReportInterval(allLogsPerUser, users, interval);
+  dateInterval.intervals.forEach((interval) => {
+    report[interval.key] = getReportInterval(
+      allLogsPerUser,
+      users,
+      interval,
+      statsType
+    );
   });
 
+  console.log(report);
   return report;
 }
 
 module.exports = {
   getTeamReport,
-  getReport
+  getReport,
 };
