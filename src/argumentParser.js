@@ -1,16 +1,46 @@
 const { forSingleDay, forDateRange } = require("./gitDateRange");
 
-function getDateRanges(arguments, todaysDate = new Date()) {
+function toIso(date) {
+  return date.toISOString().substring(0, 10);
+}
+
+function toIntervals(dateRanges) {
+  return dateRanges.map((dateRange) => {
+    const { since, until } = dateRange;
+    return {
+      since: since,
+      until: until,
+      key: `${since} to ${until}`,
+      contains: (date) => {
+        const dateDay = new Date(date);
+        const dateSince = new Date(since);
+        const dateUntil = new Date(until);
+        return dateDay >= dateSince && dateDay <= dateUntil;
+      },
+    };
+  });
+}
+
+function dateOrToday(date, todaysDate) {
+  return date ? new Date(date) : todaysDate;
+}
+
+function getDateInterval(arguments, todaysDate = new Date()) {
   const since = arguments[2];
+  const until = toIso(todaysDate);
   const interval = arguments[3];
 
-  if (!interval) {
-    return forSingleDay(since ? new Date(since) : todaysDate, todaysDate);
-  }
+  const dateRanges = interval
+    ? forDateRange(dateOrToday(since, todaysDate), todaysDate, interval)
+    : forSingleDay(dateOrToday(since, todaysDate), todaysDate);
 
-  return forDateRange(new Date(since), todaysDate, interval);
+  return {
+    since: since,
+    until: until,
+    intervals: toIntervals(dateRanges),
+  };
 }
 
 module.exports = {
-  getDateRanges
+  getDateInterval,
 };

@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { getDateInterval } = require("./argumentParser2");
+const { getDateInterval } = require("./argumentParser");
 const { getReport } = require("./gitReport");
 const { writeReportToConsole } = require("./reportTemplate");
 const { writeText, writeInfo } = require("./consoleWriter");
