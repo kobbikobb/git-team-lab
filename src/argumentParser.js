@@ -1,7 +1,11 @@
-const { forSingleDay, forDateRange } = require("./gitDateRange");
+const { forDateRange } = require("./gitDateRange");
 
 function toIso(date) {
   return date.toISOString().substring(0, 10);
+}
+
+function getNextDay(targetDate) {
+  return new Date(new Date(targetDate).setDate(targetDate.getDate() + 1));
 }
 
 function toIntervals(dateRanges) {
@@ -21,22 +25,21 @@ function toIntervals(dateRanges) {
   });
 }
 
-function dateOrToday(date, todaysDate) {
+function toDateOrDefault(date, todaysDate) {
   return date ? new Date(date) : todaysDate;
 }
 
-function getDateInterval(arguments, todaysDate = new Date()) {
-  const since = arguments[2];
-  const until = toIso(todaysDate);
-  const interval = arguments[3];
+function getDateInterval({ since, until, interval, todaysDate = new Date() }) {
+  const tomorrowsDate = getNextDay(todaysDate);
 
-  const dateRanges = interval
-    ? forDateRange(dateOrToday(since, todaysDate), todaysDate, interval)
-    : forSingleDay(dateOrToday(since, todaysDate), todaysDate);
+  const dateFrom = toDateOrDefault(since, todaysDate);
+  const dateTo = toDateOrDefault(until, tomorrowsDate);
+
+  const dateRanges = forDateRange(dateFrom, dateTo, interval);
 
   return {
     since: since,
-    until: until,
+    until: until || toIso(tomorrowsDate),
     intervals: toIntervals(dateRanges),
   };
 }

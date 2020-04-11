@@ -36,16 +36,7 @@ function addInterval(date, interval) {
   throw new Error(`Interval ${interval} not supported`);
 }
 
-function forSingleDay(targetDate, todaysDate = new Date()) {
-  return [
-    {
-      since: toIso(targetDate),
-      until: toIso(addInterval(todaysDate, "day"))
-    }
-  ];
-}
-
-function forDateRange(dateFrom, dateTo, interval) {
+function forDateRangeWithInterval(dateFrom, dateTo, interval) {
   const dateRanges = [];
 
   let targetDate = dateFrom;
@@ -54,7 +45,7 @@ function forDateRange(dateFrom, dateTo, interval) {
     const dateUntil = addInterval(targetDate, interval);
     dateRanges.push({
       since: toIso(targetDate),
-      until: toIso(dateUntil)
+      until: toIso(dateUntil),
     });
     targetDate = dateUntil;
   }
@@ -62,7 +53,24 @@ function forDateRange(dateFrom, dateTo, interval) {
   return dateRanges;
 }
 
+function forSimpleDateRange(dateFrom, dateTo) {
+  const dateRanges = [];
+
+  dateRanges.push({
+    since: toIso(dateFrom),
+    until: toIso(dateTo),
+  });
+
+  return dateRanges;
+}
+
+function forDateRange(dateFrom, dateTo, interval) {
+  if (interval) {
+    return forDateRangeWithInterval(dateFrom, dateTo, interval);
+  }
+  return forSimpleDateRange(dateFrom, dateTo);
+}
+
 module.exports = {
-  forSingleDay,
-  forDateRange
+  forDateRange,
 };
