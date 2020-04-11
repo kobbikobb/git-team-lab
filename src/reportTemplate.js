@@ -21,13 +21,13 @@ function writeSimpleFormatToConsole(report) {
 
   const userNames = Object.keys(report);
 
-  userNames.forEach(userName => {
+  userNames.forEach((userName) => {
     const {
       numberOfFiles,
       numberOfNewLines,
       numberOfDeletedLines,
       numberOfCommits,
-      numberOfIssues
+      numberOfIssues,
     } = report[userName];
 
     const line =
@@ -50,8 +50,8 @@ function writeReportToConsole(report) {
 
   let header = stringColumn("Date", 30);
 
-  userKeys.forEach(userKey => {
-    header += stringColumn(userKey, 30);
+  userKeys.forEach((userKey) => {
+    header += stringColumn(userKey, 25);
   });
 
   writeHeader(header);
@@ -67,8 +67,7 @@ function writeReportToConsole(report) {
       const {
         numberOfNewLines,
         numberOfDeletedLines,
-        numberOfCommits,
-        numberOfIssues
+        numberOfIssues,
       } = userStats;
 
       if (
@@ -76,13 +75,13 @@ function writeReportToConsole(report) {
         numberOfDeletedLines === 0 &&
         numberOfIssues === 0
       ) {
-        line += stringColumn("", 30);
+        line += stringColumn("", 25);
       } else {
         line += stringColumn(
-          `+${numberOfNewLines} / -${numberOfDeletedLines}`,
-          22
+          `+${numberOfNewLines}/-${numberOfDeletedLines}`,
+          18
         );
-        line += stringColumn(`i:${numberOfIssues}`, 8);
+        line += stringColumn(`i:${numberOfIssues}`, 7);
       }
     }
 
@@ -92,5 +91,5 @@ function writeReportToConsole(report) {
 
 module.exports = {
   writeSimpleFormatToConsole,
-  writeReportToConsole
+  writeReportToConsole,
 };

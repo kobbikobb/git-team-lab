@@ -21,6 +21,7 @@ function toNamedArguments(argumentItems) {
  * since: yyyy-MM-dd - defaults to today
  * until: yyyy-MM-dd - defaults to tomorrow
  * interval: month, week, day - defaults to day
+ * type: simple, list: default is simple
  */
 class ArgumentsWrapper {
   constructor(argumentItems) {
@@ -28,6 +29,9 @@ class ArgumentsWrapper {
   }
   getNamedArguments() {
     return this.namedArguments;
+  }
+  isListReport() {
+    return (this.namedArguments["type"] === "list");
   }
   getDateInterval() {
     return argumentParser.getDateInterval(this.namedArguments);

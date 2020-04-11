@@ -1,7 +1,7 @@
 const { getAllLogsPerUser } = require("./gitAggregator");
 const { parseUserStats } = require("./gitParser");
 
-async function getTeamReport(users, repos, since, until) {
+async function getSimpleReport(users, repos, since, until) {
   const report = {};
   const allLogsPerUser = await getAllLogsPerUser(users, repos, since, until);
   for (let i = 0; i < users.length; i++) {
@@ -39,6 +39,6 @@ async function getReport(users, repos, dateInterval) {
 }
 
 module.exports = {
-  getTeamReport,
+  getSimpleReport,
   getReport
 };

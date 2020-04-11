@@ -26,17 +26,20 @@ node ./src/index.js
 Get a report since a day
 node ./src/index.js since=2008-01-01
 
-Get a report since a day, with daily intervals
+Get a report until a day
+node ./src/index.js until=2008-01-01
+
+Get a report with a given interval
 node ./src/index.js since=2008-01-01 interval=day
-
-Get a report since a day, with weekly intervals
 node ./src/index.js since=2008-01-01 interval=week
-
-Get a report since a day, with montly intervals
 node ./src/index.js since=2008-01-01 interval=month
-
-Get a report since a day, with yearly intervals
 node ./src/index.js since=2008-01-01 interval=year
+
+Get a list report
+node ./src/index.js since=2008-01-01 type=list
+
+Combine parameters to create a complex report
+node ./src/index.js since=2019-03-01 until=2020-04-01 interval=month type=list
 
 ## Run tests
 
