@@ -6,8 +6,8 @@ Create a file in the root of this project called repos.txt.
 Add a line for each target repository.
 
 example:
-/Users/jakobjonasson/.tempo/firstproject/.git
-/Users/jakobjonasson/.tempo/secondproject/.git
+/Users/jakobjonasson/firstproject/.git
+/Users/jakobjonasson/secondproject/.git
 
 ## Setup users on your team
 
