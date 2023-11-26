@@ -52,14 +52,14 @@ function withShortstatShiftedUp(userLog) {
 } */
 function getUserLog({ path, author, since, until }) {
   return new Promise((resolve, reject) => {
+    // "--all" // All Branches
     git(path).log(
       [
         `--author=${author}`,
         `--since=${startOfDayIfTimeMissing(since)}`,
         `--until=${startOfDayIfTimeMissing(until)}`,
         "--shortstat",
-        "--no-merges", // No Merge Commits
-        "--all" // All Branches
+        "--no-merges" // No Merge Commits 
       ],
       (err, result) => {
         if (err) {
@@ -72,7 +72,34 @@ function getUserLog({ path, author, since, until }) {
   });
 }
 
+function getUsernames({ repo, since, until }) {
+  return new Promise((resolve, reject) => {
+    git(repo).log(
+      [
+        `--since=${startOfDayIfTimeMissing(since)}`,
+        `--until=${startOfDayIfTimeMissing(until)}`,
+        "--no-merges", // No Merge Commits 
+        "--format='%ae'", // Usernames
+      ],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(parseUsernames(result));
+        }
+      }
+    );
+  });
+}
+
+function parseUsernames(log) {
+  const emails = log.all[0].hash.split("\n");
+  const usernames = emails.map(email => email.substring(1, email.indexOf("@")));
+  return [...new Set(usernames)];
+}
+
 module.exports = {
   withShortstatShiftedUp,
-  getUserLog
+  getUserLog,
+  getUsernames
 };
